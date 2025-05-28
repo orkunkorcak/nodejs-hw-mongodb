@@ -44,9 +44,10 @@ export const startServer = () => {
     try {
       const contact = await getContactById(id);
       if (!contact) {
-        return res.status(404).json({
+        res.status(404).json({
           message: 'Contact not found',
         });
+        return;
       }
       res.status(200).json({
         message: `Successfully found contact with id: ${id}!`,
