@@ -3,32 +3,33 @@ import {
   getContactById,
   createContact,
   deleteContact,
-  updateContact
+  updateContact,
 } from '../services/contacts.js';
 import createHttpError from 'http-errors';
+import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 
 export const getAllContactsController = async (req, res) => {
-      const contacts = await getAllContacts();
-      res.json({
-        status: 200,
-        message: 'Successfully found contacts!',
-        data: contacts,
-      });
-    
+  const { page, perPage } = parsePaginationParams(req.query);
+  const contacts = await getAllContacts({ page, perPage });
+  res.json({
+    status: 200,
+    message: 'Successfully found contacts!',
+    data: contacts,
+  });
 };
 
 export const getContactByIdController = async (req, res) => {
-    const { contactId } = req.params;
-    const contact = await getContactById(contactId);
-    if (!contact) {
-      throw createHttpError(404, 'Contact not found');
-      }
-    res.json({
-      status: 200,
-      message: `Successfully found contact with id: ${contactId}!`,
-      data: contact,
-    });
-  };
+  const { contactId } = req.params;
+  const contact = await getContactById(contactId);
+  if (!contact) {
+    throw createHttpError(404, 'Contact not found');
+  }
+  res.json({
+    status: 200,
+    message: `Successfully found contact with id: ${contactId}!`,
+    data: contact,
+  });
+};
 
 export const createContactController = async (req, res) => {
   const contactData = req.body;
